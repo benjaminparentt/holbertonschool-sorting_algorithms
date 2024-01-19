@@ -1,108 +1,112 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "sort.h"
-
-/**
- * print_sequence - prints an array
- * @array: given arrat
- * @low: lower boundary
- * @high: upper boundary
- */
-void print_sequence(int *array, int low, int high)
+void compare_swap_down(int *array_init, int *array, size_t size_init, size_t size, int *flag)
 {
-	char *sep;
+	int n;
+	size_t i;
+	(void)array_init;
 
-	for (sep = ""; low <= high; low++)
+	//printf("compare_down\n");
+	if (flag[0] == 0)
 	{
-		printf("%s%d", sep, array[low]);
-		sep = ", ";
-	}
-	printf("\n");
-}
-
-/**
- * swap_dir - swaps tow elements if they are in the
- * specified bitonic direction
- * @array: given array
- * @e1: first element
- * @e2: second element
- * @dir: direction 1 for UP and 0 for DOWN
- */
-void swap_dir(int *array, int e1, int e2, int dir)
-{
-	int temp;
-
-	if (dir == (array[e1] > array[e2]))
-	{
-		temp = array[e1];
-		array[e1] = array[e2];
-		array[e2] = temp;
+		for (i = 0; i < size/2 ; i++)
+		{
+			if (array[0] < array[size - 1])
+			{
+				n = array[0];
+				array[0] = array[size - 1];
+				array[size - 1] = n;
+				printf("Result [%lu/%lu] (DOWN):\n", size, size_init);
+				print_array(array, size);
+			}
+		}
 	}
 }
-
-/**
- * merge_sequence - merge sequence bitonically
- * @array: given array
- * @low: lower boundary
- * @high: high boundary
- * @dir: direction 1 for UP and 0 for DOWN
- * @size: array size
- */
-void merge_sequence(int *array, size_t low, size_t high, int dir, size_t size)
+void compare_swap_up(int *array_init, int *array, size_t size_init, size_t size, int *flag)
 {
-	size_t middle, i, j;
+	int n;
+	size_t i;
+	(void)array_init;
 
-	if (high - low < 1)
-		return;
-
-	middle = (low + high) / 2;
-	for (i = low, j = middle + 1; i <= middle; i++, j++)
-		swap_dir(array, i, j, dir);
-
-	merge_sequence(array, low, middle, dir, size);
-	merge_sequence(array, middle + 1, high, dir, size);
+	//printf("size up:%lu\n", size);
+	//printf("array[0] up:%d\n", array[0]);
+	//printf("array[size-1] up:%d\n", array[size-1]);
+	//printf("compare_up\n");
+	if (flag[0] == 0)
+	{
+		for (i = 0; i < size/2 ; i++)
+		{
+			if (array[0] > array[size - 1])
+			{
+				n = array[0];
+				array[0] = array[size - 1];
+				array[size - 1] = n;
+				printf("Result [%lu/%lu] (UP):\n", size, size_init);
+				print_array(array, size);
+			}
+		}
+	}
 }
-
-/**
- * make_sequence - make bitonic sequence
- * @array: given array
- * @low: lower boundary
- * @high: high boundary
- * @dir: direction 1 for UP and 0 for DOWN
- * @size: array size
- */
-void make_sequence(int *array, size_t low, size_t high, int dir, size_t size)
+void bitonic_deep_down(int *array_init, int *array, size_t size_init, size_t size, int *flag)
 {
-	char *direction;
-	size_t middle;
+	(void)array;
 
-	if (high - low < 1)
+	//printf("deep_down_pre, size:%lu\n", size);
+	if (size < 2)
+	{
+		flag[0] = 0;
 		return;
-
-	direction = dir ? "UP" : "DOWN";
-	printf("Merging [%ld/%ld] (%s):\n", high - low + 1, size, direction);
-	print_sequence(array, low, high);
-
-	middle = (low + high) / 2;
-	make_sequence(array, low, middle, 1, size);
-	make_sequence(array, middle + 1, high, 0, size);
-
-	merge_sequence(array, low, high, dir, size);
-	printf("Result [%ld/%ld] (%s):\n", high - low + 1, size, direction);
-	print_sequence(array, low, high);
+	}
+	//printf("deep_down:i=%lu\n", i);
+	printf("Merging [%lu/%lu] (DOWN):\n", size, size_init);
+	print_array(array, size);
+	bitonic_deep_up(array_init, array, size_init, size / 2, flag);
+	compare_swap_up(array_init, array, size_init, size, flag);
+	//flag[0] = 0;
+	bitonic_deep_down(array_init, array + (size/2), size_init, size / 2, flag);
+	//flag[0] = 1;
+	compare_swap_down(array_init, array, size_init, size, flag);
+	//compare_swap(array, 0, i);
+	//printf("despues de swap\n");
+	//print_array(array, size);
 }
+void bitonic_deep_up(int *array_init, int *array, size_t size_init, size_t size, int *flag)
+{
+	(void)array;
 
+	//printf("deep_up_pre, size:%lu\n", size);
+	if (size < 2)
+	{
+		flag[0] = 0;
+		return;
+	}
+	//printf("deep_up:i=%lu\n", i);
+	printf("Merging [%lu/%lu] (UP):\n", size, size_init);
+	print_array(array, size);
+	bitonic_deep_up(array_init, array, size_init, size / 2, flag);
+	compare_swap_up(array_init, array, size_init, size, flag);
+	bitonic_deep_down(array_init, array + (size/2), size_init, size / 2, flag);
+	compare_swap_down(array_init, array, size_init, size, flag);
+	//flag[0] = 1;
+	//compare_swap(array, 0, i);
+	//printf("despues de swap\n");
+	//print_array(array, size);
+}
 /**
- * bitonic_sort -  sorts an array of integers in
- * ascending order using the Bitonic sort algorithm
- * @array: given array
- * @size: array size
- */
+ *
+ *
+ *
+ *
+ **/
 void bitonic_sort(int *array, size_t size)
 {
-	if (!array || size < 2)
-		return;
+	size_t size_init = size;
+	int *array_init = array;
+	int *flag;
+	int aux = {0};
 
-	make_sequence(array, 0, size - 1, 1, size);
+	flag = &aux;
+	if (array)
+	{
+		bitonic_deep_up(array_init, array, size_init, size, flag);
+	}	
 }
-

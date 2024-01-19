@@ -9,11 +9,11 @@
 void swap1(listint_t **list, listint_t *head, listint_t *aux)
 {
 	if (head->prev)
-		head->prev->next = aux;
+	head->prev->next = aux;
 	else
-		*list = aux;
+	*list = aux;
 	if (aux->next)
-		aux->next->prev = head;
+	aux->next->prev = head;
 	head->next = aux->next;
 	aux->prev = head->prev;
 	aux->next = head;

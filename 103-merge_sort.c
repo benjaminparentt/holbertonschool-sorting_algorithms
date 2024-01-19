@@ -1,27 +1,26 @@
 #include "sort.h"
 
 /**
- * print_parse - prints the values in the array
+ * print_parse - prints the value in array
  *
  * @array: array to be printed
- * @text: text to be printed alongside values
+ * @text: text to  printed alongside values
  * @low: lower bound
  * @high: upper bound
  */
 void print_parse(int *array, const char *text, size_t low, size_t high)
 {
-    size_t i;
-    char *separator = "";
+	size_t i;
+	char *separator = "";
 
-    printf("[%s]: ", text);
-    for (i = low; i <= high; i++)
-    {
-        printf("%s%d", separator, array[i]);
-        separator = ", ";
-    }
-    printf("\n");
+	printf("[%s]: ", text);
+	for (i = low; i <= high; i++)
+	{
+		printf("%s%d", separator, array[i]);
+		separator = ", ";
+	}
+	printf("\n");
 }
-
 /**
  * join_parse - joins and sorts the values in the array
  * parsed
@@ -34,24 +33,24 @@ void print_parse(int *array, const char *text, size_t low, size_t high)
  */
 void join_parse(int *arr, size_t low, size_t high, size_t mid, int *copy)
 {
-    size_t hStart = mid + 1, newIndex, lStart = low, i;
+	size_t hStart = mid + 1, newIndex, lStart = low, i;
 
-    printf("Merging...\n");
-    print_parse(arr, "left", low, mid);
-    print_parse(arr, "right", mid + 1, high);
+	printf("Merging...\n");
+	print_parse(arr, "left", low, mid);
+	print_parse(arr, "right", mid + 1, high);
 
-    for (newIndex = low; newIndex <= high; newIndex++) /* fill sorted values */
-    {
-        if ((lStart <= mid && arr[lStart] <= arr[hStart]) || hStart > high)
-            copy[newIndex] = arr[lStart++];
-        else
-            copy[newIndex] = arr[hStart++];
-    }
+	for (newIndex = low; newIndex <= high; newIndex++)  /* fill sorted val */
+	{
+		if ((lStart <= mid && arr[lStart] <= arr[hStart]) || hStart > high)
+			copy[newIndex] = arr[lStart++];
+		else
+			copy[newIndex] = arr[hStart++];
+	}
 
-    for (i = low; i <= high; i++) /* update initial array with sorted arr */
-        arr[i] = copy[i];
+	for (i = low; i <= high; i++)   /* update initial array with sorted arr */
+		arr[i] = copy[i];
 
-    print_parse(arr, "Done", low, high);
+	print_parse(arr, "Done", low, high);
 }
 
 /**
@@ -65,17 +64,17 @@ void join_parse(int *arr, size_t low, size_t high, size_t mid, int *copy)
  */
 void parser(int *array, size_t lb, size_t ub, int *copy)
 {
-    size_t mid;
+	size_t mid;
 
-    if (lb < ub)
-    {
-        mid = lb + (ub - lb) / 2;
+	if (lb < ub)
+	{
+		mid = (ub + lb - 1) / 2;
 
-        parser(array, lb, mid, copy);
-        parser(array, mid + 1, ub, copy);
+		parser(array, lb, mid, copy);
+		parser(array, mid + 1, ub, copy);
 
-        join_parse(array, lb, ub, mid, copy);
-    }
+		join_parse(array, lb, ub, mid, copy);
+	}
 }
 
 /**
@@ -87,30 +86,16 @@ void parser(int *array, size_t lb, size_t ub, int *copy)
  */
 void merge_sort(int *array, size_t size)
 {
-    int *clone;
+	int *clone;
 
-    if (!array || size < 2) /* only one value or less in array */
-        return;
+	if (!array || size < 2)   /* only one value or less in array */
+		return;
 
-    // Check if the array is already sorted
-    int sorted = 1;
-    for (size_t i = 1; i < size; i++)
-    {
-        if (array[i - 1] > array[i])
-        {
-            sorted = 0;
-            break;
-        }
-    }
+	clone = malloc(sizeof(int) * size);
+	if (!clone)
+		return;
 
-    if (sorted)
-        return;
-
-    clone = malloc(sizeof(int) * size);
-    if (!clone)
-        return;
-
-    parser(array, 0, size - 1, clone);
-    free(clone);
+	parser(array, 0, size - 1, clone);
+	free(clone);
 }
 

@@ -71,25 +71,25 @@ void merge_sequence(int *array, size_t low, size_t high, int dir, size_t size)
  * @dir: direction 1 for UP and 0 for DOWN
  * @size: array size
  */
-void make_sequence(int *array, size_t low, size_t high, int dir, size_t size)
+ void make_sequence(int *array, size_t low, size_t high, int dir, size_t size)
 {
-	char *direction;
-	size_t middle;
+    char *direction;
+    size_t middle;
 
-	if (high - low < 1)
-		return;
+    if (high - low < 1)
+        return;
 
-	direction = dir ? "UP" : "DOWN";
-	printf("Merging [%ld/%ld] (%s):\n", high - low + 1, size, direction);
-	print_sequence(array, low, high);
+    direction = dir ? "UP" : "DOWN";
+    printf("Merging [%ld/%ld] (%s):\n", high - low + 1, size, direction);
+    print_sequence(array, low, high);
 
-	middle = (low + high) / 2;
-	make_sequence(array, low, middle, 1, size);
-	make_sequence(array, middle + 1, high, 0, size);
+    middle = (low + high) / 2;
+    make_sequence(array, low, middle, 1, size);
+    make_sequence(array, middle + 1, high, 0, size);  // Pass direction 0 for DOWN here
 
-	merge_sequence(array, low, high, dir, size);
-	printf("Result [%ld/%ld] (%s):\n", high - low + 1, size, direction);
-	print_sequence(array, low, high);
+    merge_sequence(array, low, high, dir, size);
+    printf("Result [%ld/%ld] (%s):\n", high - low + 1, size, direction);
+    print_sequence(array, low, high);
 }
 
 /**

@@ -1,4 +1,4 @@
-O(n)       // Best case: The list is already sorted
-O(n^2)     // Average case: In a typical scenario
-O(n^2)     // Worst case: The list is in reverse order
+O(n)
+O(n^2)
+O(n^2)
 

@@ -106,4 +106,3 @@ void bitonic_sort(int *array, size_t size)
 	make_sequence(array, 0, size - 1, 1, size);
 }
 
-

@@ -1,58 +1,111 @@
 #include "sort.h"
 
 /**
- * swap - Function that swaps two values
+ * find_pow - find power of a number
+ * @x: the number
+ * @y: the value of power
  *
- * @a: Fisrt value
- * @b: Second value
- * Return: 0
+ * Return: the power of x
  */
-void swap(int *a, int *b)
+int find_pow(int x, size_t y)
 {
-	int tmp;
+	if (y == 0)
+		return (1);
 
-	tmp = *b;
-	*b = *a;
-	*a = tmp;
+	return (x * find_pow(x, y - 1));
 }
 
 /**
- * gap_sort - sort array with gaps
- * @array: array to be sorted
- * @size: size of array
- * @gap: gap size
+ * seq_generator - generate sequence
+ * @size: size of sequence
+ *
+ * Return: pointer to the address of sequence
  */
-void gap_sort(int *array, size_t size, unsigned int gap)
+int *seq_generator(size_t size)
 {
-	size_t j, k;
+	size_t n = 0;
+	int i = 0, nth_term, *sequence;
 
-	for (j = gap; j < size; j++)
+	sequence = malloc(sizeof(int) * size);
+	if (sequence == NULL)
+		return (NULL);
+
+	nth_term = 0;
+	while (n < size)
 	{
-		k = j;
-		while (k >= gap && array[k] < array[k - gap])
-		{
-			swap(array + k, array + k - gap);
-			k -= gap;
-		}
+		nth_term = nth_term + find_pow(3, n);
+		sequence[i] = nth_term;
+		n++;
+		i++;
 	}
+	return (sequence);
 }
 
 /**
- * shell_sort - shell sort
+ * reverse_seq - reverse sequence
+ * @sequence: pointer to the address of sequence
+ * @size: size of sequence
+ *
+ * Return: sequence in reverse
+ */
+int *reverse_seq(int *sequence, size_t size)
+{
+	int *rev_seq;
+	size_t i = 0, seq_index;
+
+	rev_seq = malloc(sizeof(int) * size);
+	if (rev_seq == NULL)
+		return (NULL);
+
+	seq_index = size - 1;
+	while (i < size)
+	{
+		rev_seq[i] = sequence[seq_index];
+		i++;
+		seq_index--;
+	}
+	return (rev_seq);
+}
+
+/**
+ * shell_sort - sorts using the Shell sort algorithm
  * @array: array to be sorted
  * @size: size of array
+ *
+ * Return: nothing
  */
 void shell_sort(int *array, size_t size)
 {
-	unsigned int gap = 1;
+	int j, flag = 0;
+	int temp, *sequence, *rev_seq, hold;
+	size_t i, seq_index = 0;
 
-	while (gap < size / 3)
-		gap = gap * 3 + 1;
+	sequence = seq_generator(size);
+	if (sequence == NULL)
+		return;
 
-	while (gap >= 1)
+	rev_seq = reverse_seq(sequence, size);
+	if (rev_seq == NULL)
+		return;
+
+	while (seq_index < size)
 	{
-		gap_sort(array, size, gap);
-		gap = (gap - 1) / 3;
-		print_array(array, size);
+		for (i = rev_seq[seq_index]; i < size; i++)
+		{
+			temp = array[i];
+			hold = rev_seq[seq_index];
+			for (j = i; j >= hold && array[j - hold] > temp; j -= hold)
+			{
+				array[j] = array[j - rev_seq[seq_index]];
+			}
+			array[j] = temp;
+			flag = 1;
+		}
+		if (flag)
+			print_array(array, size);
+		seq_index++;
 	}
+	free(sequence);
+	free(rev_seq);
 }
+

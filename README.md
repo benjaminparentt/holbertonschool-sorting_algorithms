@@ -1,64 +1,68 @@
+# C - Sorting algorithms & Big O
 
-C - Sorting algorithms & Big O
+## Contexte
 
-Background Context
+Ce projet est conçu pour être réalisé par des groupes de deux étudiants. Chaque paire d'étudiants devrait faire de la programmation en binôme, en particulier pour la partie obligatoire.
 
-This project is designed for groups of two students to collaborate. Each pair of students should engage in pair programming, especially for the mandatory part.
+## Ressources
 
-Resources
+Lisez ou regardez les ressources suivantes pour améliorer votre compréhension :
 
-Read or watch the following resources to enhance your understanding:
+- Algorithme de tri
+- Notation Big O
+- Animations d'algorithmes de tri
+- [15 algorithmes de tri en 6 minutes (AVERTISSEMENT : La vidéo suivante peut déclencher des crises d'épilepsie. Elle n'est pas nécessaire pour le projet, car il s'agit simplement d'une visualisation amusante de différents algorithmes de tri)](lien-de-la-video)
 
-Sorting algorithm
-Big O notation
-Sorting algorithms animations
-15 sorting algorithms in 6 minutes (WARNING: The following video can trigger seizure/epilepsy. It is not required for the project, as it is only a funny visualization of different sorting algorithms)
-Learning Objectives
+## Objectifs d'Apprentissage
 
-Upon completion of this project, you should be able to explain the following concepts without relying on Google:
+À la fin de ce projet, vous devriez être en mesure d'expliquer les concepts suivants à n'importe qui, sans l'aide de Google :
 
-General
+### Général
 
-Implementation of at least four different sorting algorithms.
-Understanding of the Big O notation and ability to evaluate the time complexity of an algorithm.
-Selection of the best sorting algorithm for a given input.
-Definition of a stable sorting algorithm.
-Requirements
+- Implémentation d'au moins quatre algorithmes de tri différents.
+- Compréhension de la notation Big O et capacité à évaluer la complexité temporelle d'un algorithme.
+- Sélection du meilleur algorithme de tri pour une entrée donnée.
+- Définition d'un algorithme de tri stable.
 
-General
+## Exigences
 
-Allowed editors: vi, vim, emacs
-Compilation of all files on Ubuntu 20.04 LTS using gcc, with the options: -Wall -Werror -Wextra -pedantic -std=gnu89
-All files should end with a new line.
-A README.md file at the root of the project folder is mandatory.
-Code should follow the Betty style, and will be checked using betty-style.pl and betty-doc.pl.
-Prohibition of global variables.
-Limit of five functions per file.
-Unless specified otherwise, standard library functions (e.g., printf, puts) are forbidden.
-Example main.c files are provided for testing functions but don’t have to be pushed to the repository.
-Prototypes of all functions should be included in a header file named sort.h.
-The header files should be include guarded.
-A list/array does not need to be sorted if its size is less than 2.
-GitHub
+### Général
 
-Each group should have one project repository.
-Cloning/forking a project repository with the same name before the second deadline risks a 0% score.
-More Info
+- Éditeurs autorisés : vi, vim, emacs
+- Compilation de tous les fichiers sur Ubuntu 20.04 LTS en utilisant gcc, avec les options : `-Wall -Werror -Wextra -pedantic -std=gnu89`
+- Tous les fichiers doivent se terminer par une nouvelle ligne.
+- Un fichier `README.md` à la racine du dossier du projet est obligatoire.
+- Le code doit suivre le style Betty, et sera vérifié en utilisant `betty-style.pl` et `betty-doc.pl`.
+- Interdiction des variables globales.
+- Limite de cinq fonctions par fichier.
+- Sauf indication contraire, l'utilisation de fonctions de bibliothèque standard (par exemple, printf, puts) est interdite.
+- Des fichiers main.c sont fournis en exemple pour tester les fonctions, mais ils ne doivent pas être poussés dans votre référentiel (si vous le faites, nous ne les prendrons pas en compte). Nous utiliserons nos propres fichiers main.c lors de la compilation. Nos fichiers main.c peuvent être différents de ceux montrés dans les exemples.
+- Les prototypes de toutes vos fonctions doivent être inclus dans votre fichier d'en-tête appelé `sort.h`.
+- N'oubliez pas de pousser votre fichier d'en-tête.
+- Tous vos fichiers d'en-tête doivent être protégés contre les inclusions multiples.
+- Une liste/tableau n'a pas besoin d'être trié si sa taille est inférieure à 2.
 
-Data Structure and Functions
+### GitHub
 
-For this project, you have access to the following functions:
+- Il devrait y avoir un dépôt de projet par groupe. Si vous clonez/fourchez/quoi que ce soit d'autre un dépôt de projet avec le même nom avant la deuxième date limite, vous risquez un score de 0%.
 
-print_array
+## Informations Supplémentaires
 
+### Structure de Données et Fonctions
+
+Pour ce projet, vous avez accès aux fonctions suivantes :
+
+#### `print_array`
+
+```c
 #include <stdlib.h>
 #include <stdio.h>
 
 /**
- * print_array - Prints an array of integers
+ * print_array - Affiche un tableau d'entiers
  *
- * @array: The array to be printed
- * @size: Number of elements in @array
+ * @array: Le tableau à afficher
+ * @size: Nombre d'éléments dans @array
  */
 void print_array(const int *array, size_t size)
 {
@@ -75,15 +79,18 @@ void print_array(const int *array, size_t size)
     printf("\n");
 }
 
-#### `print_list`
 
+
+#### Fonction `print_list`
+
+```c
 #include <stdio.h>
 #include "sort.h"
 
 /**
- * print_list - Prints a list of integers
+ * print_list - Affiche une liste d'entiers
  *
- * @list: The list to be printed
+ * @list: La liste à afficher
  */
 void print_list(const listint_t *list)
 {
@@ -100,18 +107,16 @@ void print_list(const listint_t *list)
     }
     printf("\n");
 }
+Les fichiers print_array.c et print_list.c (contenant les fonctions print_array et print_list) seront compilés avec vos fonctions lors de la correction. Assurez-vous de déclarer les prototypes de ces fonctions dans votre fichier d'en-tête sort.h
 
+Structure de Liste Doublement Chaînée
 
-The files `print_array.c` and `print_list.c` (containing the `print_array` and `print_list` functions) will be compiled with your functions during the correction. Ensure to declare the prototypes of these functions in your `sort.h` header file.
-
-### Doubly Linked List Structure
-
- /**
- * struct listint_s - Doubly linked list node
+/**
+ * struct listint_s - Nœud de liste doublement chaînée
  *
- * @n: Integer stored in the node
- * @prev: Pointer to the previous element of the list
- * @next: Pointer to the next element of the list
+ * @n: Entier stocké dans le nœud
+ * @prev: Pointeur vers l'élément précédent de la liste
+ * @next: Pointeur vers l'élément suivant de la liste
  */
 typedef struct listint_s
 {
@@ -121,22 +126,18 @@ typedef struct listint_s
 } listint_t;
 
 
+Notation Big O
+O(1)
+O(n)
+O(n!)
+O(n^2) (n au carré)
+O(log(n))
+O(n log(n))
+O(n + k)
+...
 
-### Big O Notation
+Veuillez utiliser la notation "courte" (évitez d'utiliser des constantes). Par exemple, O(nk) ou O(wn) doit être écrit comme O(n). Si une réponse est requise dans un fichier, assurez-vous que tous vos fichiers de réponse ont une nouvelle ligne à la fin.
 
--   O(1)
--   O(n)
--   O(n!)
--   O(n^2) (n square)
--   O(log(n))
--   O(n log(n))
--   O(n + k)
--   ...
+Tests
 
-Please use the "short" notation (avoid using constants). Example: `O(nk)` or `O(wn)` should be written as `O(n)`. If an answer is required within a file, ensure all your answer files have a newline at the end.
-
-## Tests
-
-For testing sorting algorithms with large sets of random integers, you can use [Random.org](https://www.random.org/).
-
-AUTHORS : Benjamin & Célestine `
+Pour tester les algorithmes de tri avec de grands ensembles d'entiers aléatoires, vous pouvez utiliser Random.org.
